@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+//Exercise and WorkoutPlan tables are in a M:M relationship, and PlanExercise is the junction table
 @Entity
 @Table(name = "plan_exercises")
 
