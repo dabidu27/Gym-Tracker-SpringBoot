@@ -1,6 +1,5 @@
 package com.gymtracker.demo.controller;
 
-import com.gymtracker.demo.auth.JwtService;
 import com.gymtracker.demo.auth.Middleware;
 import com.gymtracker.demo.dtos.CreatePlanRequest;
 import com.gymtracker.demo.dtos.WorkoutPlanResponse;
@@ -8,7 +7,6 @@ import com.gymtracker.demo.entity.User;
 import com.gymtracker.demo.entity.WorkoutPlan;
 import com.gymtracker.demo.service.WorkoutPlanService;
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +19,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/workout_plan")
-public class WorkoutController {
+public class WorkoutPlanController {
 
     @Autowired
     WorkoutPlanService workoutPlanService;
@@ -82,5 +80,25 @@ public class WorkoutController {
         response.put("user_id", user.getId());
         return ResponseEntity.status(200).body(response);
 
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getWorkoutPlanById(@PathVariable Long id){
+
+        User user = this.middleware.getCurrentUser();
+        WorkoutPlan workoutPlan = new WorkoutPlan();
+        try{
+            workoutPlan = this.workoutPlanService.getWorkoutById(id, user);
+        } catch (RuntimeException e) {
+            Map<String, String> response = new HashMap<>();
+            response.put("error", e.getMessage());
+            return ResponseEntity.status(404).body(response);
+        }
+
+        WorkoutPlanResponse workoutPlanResponse = new WorkoutPlanResponse(workoutPlan.getName(), workoutPlan.getId(), workoutPlan.getCreatedAt());
+        Map<String, Object> response = new HashMap<>();
+        response.put("workout_plan", workoutPlanResponse);
+        response.put("user_id", user.getId());
+        return ResponseEntity.status(200).body(response);
     }
 }

@@ -32,4 +32,9 @@ public class WorkoutPlanService {
         return this.workoutPlanRepository.findByUser(user).orElseThrow(() -> new RuntimeException("Couldn't find workouts"));
     }
 
+    public WorkoutPlan getWorkoutById(Long id, User user){
+
+        return this.workoutPlanRepository.findByIdAndUser(id, user).orElseThrow(() -> new RuntimeException("Couldn't find workout"));
+    }
+
 }
