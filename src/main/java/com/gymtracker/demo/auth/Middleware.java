@@ -15,8 +15,6 @@ public class Middleware {
     UserRepository userRepository;
 
     public User getCurrentUser(){
-
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return this.userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }
