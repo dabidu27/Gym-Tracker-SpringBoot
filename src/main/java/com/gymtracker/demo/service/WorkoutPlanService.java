@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class WorkoutPlanService {
 
@@ -24,6 +26,10 @@ public class WorkoutPlanService {
         workoutPlan.setUser(user);
         workoutPlan.setName(name);
         return this.workoutPlanRepository.save(workoutPlan);
+    }
+
+    public List<WorkoutPlan> getAllWorkouts(User user){
+        return this.workoutPlanRepository.findByUser(user).orElseThrow(() -> new RuntimeException("Couldn't find workouts"));
     }
 
 }
