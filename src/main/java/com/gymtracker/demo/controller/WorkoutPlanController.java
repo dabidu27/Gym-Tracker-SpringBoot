@@ -101,4 +101,24 @@ public class WorkoutPlanController {
         response.put("user_id", user.getId());
         return ResponseEntity.status(200).body(response);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteWorkout(@PathVariable Long id){
+
+        User user = this.middleware.getCurrentUser();
+        WorkoutPlan workoutPlanDeleted = new WorkoutPlan();
+        try{
+            workoutPlanDeleted = this.workoutPlanService.deleteWorkoutById(id, user);
+        }catch (RuntimeException e){
+            Map<String, String> response = new HashMap<>();
+            response.put("error", e.getMessage());
+            return ResponseEntity.status(400).body(response);
+        }
+
+        WorkoutPlanResponse workoutPlanResponse = new WorkoutPlanResponse(workoutPlanDeleted.getName(), workoutPlanDeleted.getId(), workoutPlanDeleted.getCreatedAt());
+        Map<String, Object> response = new HashMap<>();
+        response.put("workout_plan", workoutPlanResponse);
+        response.put("user_id", user.getId());
+        return ResponseEntity.status(200).body(response);
+    }
 }

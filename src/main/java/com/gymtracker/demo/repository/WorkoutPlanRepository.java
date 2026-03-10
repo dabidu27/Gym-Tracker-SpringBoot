@@ -12,4 +12,5 @@ public interface WorkoutPlanRepository extends JpaRepository<WorkoutPlan, Long> 
     public Optional<WorkoutPlan> findByName(String name);
     public Optional<List<WorkoutPlan>> findByUser(User user);
     public Optional<WorkoutPlan> findByIdAndUser(Long id, User user);
+    public Optional<WorkoutPlan> deleteByIdAndUser(Long id, User user);
 }

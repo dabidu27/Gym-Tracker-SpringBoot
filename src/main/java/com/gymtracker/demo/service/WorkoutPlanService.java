@@ -3,6 +3,7 @@ package com.gymtracker.demo.service;
 import com.gymtracker.demo.entity.User;
 import com.gymtracker.demo.entity.WorkoutPlan;
 import com.gymtracker.demo.repository.WorkoutPlanRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,12 +30,18 @@ public class WorkoutPlanService {
     }
 
     public List<WorkoutPlan> getAllWorkouts(User user){
-        return this.workoutPlanRepository.findByUser(user).orElseThrow(() -> new RuntimeException("Couldn't find workouts"));
+        return this.workoutPlanRepository.findByUser(user).orElseThrow(() -> new RuntimeException("Couldn't find workout plans"));
     }
 
     public WorkoutPlan getWorkoutById(Long id, User user){
 
-        return this.workoutPlanRepository.findByIdAndUser(id, user).orElseThrow(() -> new RuntimeException("Couldn't find workout"));
+        return this.workoutPlanRepository.findByIdAndUser(id, user).orElseThrow(() -> new RuntimeException("Couldn't find workout plan"));
     }
 
+    //make the delete method @Transactional, as Spring needs an active transaction to make delete operations
+    //@Transactional opens a transaction for the duration of the method
+    @Transactional
+    public WorkoutPlan deleteWorkoutById(Long id, User user){
+        return this.workoutPlanRepository.deleteByIdAndUser(id, user).orElseThrow(() -> new RuntimeException("Couldn't delete workout plan"));
+    }
 }
