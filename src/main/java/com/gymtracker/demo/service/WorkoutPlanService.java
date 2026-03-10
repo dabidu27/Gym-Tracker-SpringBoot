@@ -19,7 +19,7 @@ public class WorkoutPlanService {
 
     public WorkoutPlan createWorkoutPlan(String name, User user){
 
-        if(this.workoutPlanRepository.findByName(name).isPresent()){
+        if(this.workoutPlanRepository.findByNameAndUser(name, user).isPresent()){
             throw new RuntimeException("You already have a workout plan with this name");
         }
 
@@ -30,7 +30,7 @@ public class WorkoutPlanService {
     }
 
     public List<WorkoutPlan> getAllWorkouts(User user){
-        return this.workoutPlanRepository.findByUser(user).orElseThrow(() -> new RuntimeException("Couldn't find workout plans"));
+        return this.workoutPlanRepository.findByUser(user);
     }
 
     public WorkoutPlan getWorkoutById(Long id, User user){
