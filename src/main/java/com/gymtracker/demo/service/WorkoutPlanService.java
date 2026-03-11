@@ -42,6 +42,14 @@ public class WorkoutPlanService {
     //@Transactional opens a transaction for the duration of the method
     @Transactional
     public WorkoutPlan deleteWorkoutById(Long id, User user){
-        return this.workoutPlanRepository.deleteByIdAndUser(id, user).orElseThrow(() -> new RuntimeException("Couldn't delete workout plan"));
+        //custom delete methods are proven to behave weirdly in Spring Boot
+        //return this.workoutPlanRepository.deleteByIdAndUser(id, user).orElseThrow(() -> new RuntimeException("Couldn't delete workout plan"));
+
+        //so instead of this custom method, the general flow is:
+        //get the workout by ID (using findByIdAndUser, to also verify ownership)
+        //if it exists, delete it using the .delete() (comes out of the box with the repo)
+        WorkoutPlan workoutPlan = this.workoutPlanRepository.findByIdAndUser(id, user).orElseThrow(() -> new RuntimeException("Workout plan not found"));
+        this.workoutPlanRepository.delete(workoutPlan);
+        return workoutPlan;
     }
 }
