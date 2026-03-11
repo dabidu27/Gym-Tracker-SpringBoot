@@ -14,5 +14,4 @@ public interface WorkoutPlanRepository extends JpaRepository<WorkoutPlan, Long> 
     //the method above should not return Optional, because a List is never null, it is just empty
     public List<WorkoutPlan> findByUser(User user);
     public Optional<WorkoutPlan> findByIdAndUser(Long id, User user);
-    public Optional<WorkoutPlan> deleteByIdAndUser(Long id, User user);
 }
