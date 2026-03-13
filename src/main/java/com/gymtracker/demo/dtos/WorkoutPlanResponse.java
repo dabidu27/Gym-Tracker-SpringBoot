@@ -15,4 +15,5 @@ public class WorkoutPlanResponse {
     private String name;
     private Long id;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

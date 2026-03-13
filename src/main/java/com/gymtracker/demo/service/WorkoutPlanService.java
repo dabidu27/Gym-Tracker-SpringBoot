@@ -52,4 +52,11 @@ public class WorkoutPlanService {
         this.workoutPlanRepository.delete(workoutPlan);
         return workoutPlan;
     }
+
+    public WorkoutPlan editWorkoutById(Long id, User user, String name){
+
+        WorkoutPlan workoutPlan = this.workoutPlanRepository.findByIdAndUser(id, user).orElseThrow(() -> new RuntimeException("Could not find workout plan"));
+        workoutPlan.setName(name);
+        return this.workoutPlanRepository.save(workoutPlan);
+    }
 }
