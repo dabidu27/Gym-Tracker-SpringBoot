@@ -2,6 +2,7 @@ package com.gymtracker.demo.controller;
 
 import com.gymtracker.demo.auth.Middleware;
 import com.gymtracker.demo.dtos.AddExerciseToPlanRequest;
+import com.gymtracker.demo.dtos.EditPlanExercise;
 import com.gymtracker.demo.dtos.PlanExerciseResponse;
 import com.gymtracker.demo.entity.PlanExercise;
 import com.gymtracker.demo.entity.User;
@@ -46,6 +47,7 @@ public class PlanExerciseController {
         }
 
         PlanExerciseResponse planExerciseResponse = new PlanExerciseResponse();
+        planExerciseResponse.setId(planExercise.getId());
         planExerciseResponse.setExerciseId(planExercise.getExercise().getId());
         planExerciseResponse.setWorkoutPlanId(planExercise.getWorkoutPlan().getId());
         planExerciseResponse.setTargetSets(planExercise.getTargetSets());
@@ -73,6 +75,36 @@ public class PlanExerciseController {
         List<PlanExerciseResponse> responseList = exercisesOfPlan.stream().map(ep -> new PlanExerciseResponse(ep.getId(), ep.getExercise().getId(), ep.getWorkoutPlan().getId(), ep.getTargetSets(), ep.getTargetReps())).collect(Collectors.toList());
         Map<String, Object> response = new HashMap<>();
         response.put("plan_exercises", responseList);
+        response.put("user_id", user.getId());
+        return ResponseEntity.status(200).body(response);
+    }
+
+    @PutMapping("/{workoutPlanId}/exercises/{planExerciseId}")
+    //we modify a PlanExercise object so the user can change number of sets or reps
+    public ResponseEntity<Object> editSetsAndReps(@PathVariable Long workoutPlanId, @PathVariable Long planExerciseId, @Valid @RequestBody EditPlanExercise req){
+
+        Integer newSets = req.getSets();
+        Integer newReps = req.getReps();
+        User user = this.middleware.getCurrentUser();
+        PlanExercise planExercise = new PlanExercise();
+        try{
+            planExercise = this.planExerciseService.editSetsAndReps(workoutPlanId, planExerciseId, user, newSets, newReps);
+        }catch (RuntimeException e){
+            Map<String, String> response = new HashMap<>();
+            response.put("error", e.getMessage());
+            return ResponseEntity.status(400).body(response);
+        }
+
+
+        PlanExerciseResponse planExerciseResponse = new PlanExerciseResponse();
+        planExerciseResponse.setId(planExercise.getId());
+        planExerciseResponse.setExerciseId(planExercise.getExercise().getId());
+        planExerciseResponse.setWorkoutPlanId(planExercise.getWorkoutPlan().getId());
+        planExerciseResponse.setTargetSets(planExercise.getTargetSets());
+        planExerciseResponse.setTargetReps(planExercise.getTargetReps());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("plan_exercise", planExerciseResponse);
         response.put("user_id", user.getId());
         return ResponseEntity.status(200).body(response);
     }

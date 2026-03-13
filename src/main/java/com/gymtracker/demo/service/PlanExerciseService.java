@@ -59,4 +59,14 @@ public class PlanExerciseService {
         List<PlanExercise> exercisesOfPlan = this.planExerciseRepository.findByWorkoutPlanId(workoutPlanId);
         return exercisesOfPlan;
     }
+
+    public PlanExercise editSetsAndReps(Long workoutPlanId, Long planExerciseId, User user , Integer newSets, Integer newReps){
+
+        WorkoutPlan wp = this.workoutPlanRepository.findByIdAndUser(workoutPlanId, user).orElseThrow(() -> new RuntimeException("Workout plan not found"));
+        //find the plan exercise directly by its id (not by the global exercise id)
+        PlanExercise planExercise = this.planExerciseRepository.findById(planExerciseId).orElseThrow(() -> new RuntimeException("Exercise not found in this workout plan"));
+        planExercise.setTargetSets(newSets);
+        planExercise.setTargetReps(newReps);
+        return this.planExerciseRepository.save(planExercise);
+    }
 }
