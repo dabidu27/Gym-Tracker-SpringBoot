@@ -9,6 +9,9 @@ import com.gymtracker.demo.repository.PlanExerciseRepository;
 import com.gymtracker.demo.repository.WorkoutPlanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.EscapedErrors;
+
+import java.util.List;
 
 @Service
 public class PlanExerciseService {
@@ -48,5 +51,12 @@ public class PlanExerciseService {
 
         //4. save the object
         return this.planExerciseRepository.save(planExercise);
+    }
+
+    public List<PlanExercise> getAllExercises(Long workoutPlanId, User user){
+
+        WorkoutPlan wp = this.workoutPlanRepository.findByIdAndUser(workoutPlanId, user).orElseThrow(() -> new RuntimeException("Workout plan not found"));
+        List<PlanExercise> exercisesOfPlan = this.planExerciseRepository.findByWorkoutPlanId(workoutPlanId);
+        return exercisesOfPlan;
     }
 }
