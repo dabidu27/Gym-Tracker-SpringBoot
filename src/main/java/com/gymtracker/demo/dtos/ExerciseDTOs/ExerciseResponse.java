@@ -1,6 +1,5 @@
-package com.gymtracker.demo.dtos;
+package com.gymtracker.demo.dtos.ExerciseDTOs;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,8 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreatePlanRequest {
+public class ExerciseResponse {
 
-    @NotBlank
+    private Long id;
     private String name;
+    private String muscleGroup;
 }

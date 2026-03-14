@@ -1,9 +1,11 @@
 package com.gymtracker.demo.controller;
 
 import com.gymtracker.demo.auth.Middleware;
-import com.gymtracker.demo.dtos.AddExerciseToPlanRequest;
-import com.gymtracker.demo.dtos.EditPlanExercise;
-import com.gymtracker.demo.dtos.PlanExerciseResponse;
+import com.gymtracker.demo.dtos.ExerciseDTOs.ExerciseResponse;
+import com.gymtracker.demo.dtos.PlanExerciseDTOs.AddExerciseToPlanRequest;
+import com.gymtracker.demo.dtos.PlanExerciseDTOs.EditPlanExercise;
+import com.gymtracker.demo.dtos.PlanExerciseDTOs.PlanExerciseResponse;
+import com.gymtracker.demo.dtos.WorkoutPlanDTOs.WorkoutPlanResponse;
 import com.gymtracker.demo.entity.PlanExercise;
 import com.gymtracker.demo.entity.User;
 import com.gymtracker.demo.service.PlanExerciseService;
@@ -48,8 +50,11 @@ public class PlanExerciseController {
 
         PlanExerciseResponse planExerciseResponse = new PlanExerciseResponse();
         planExerciseResponse.setId(planExercise.getId());
-        planExerciseResponse.setExerciseId(planExercise.getExercise().getId());
-        planExerciseResponse.setWorkoutPlanId(planExercise.getWorkoutPlan().getId());
+
+        ExerciseResponse exerciseResponse = new ExerciseResponse(planExercise.getExercise().getId(), planExercise.getExercise().getName(), planExercise.getExercise().getMuscleGroup());
+        WorkoutPlanResponse wpr = new WorkoutPlanResponse(planExercise.getWorkoutPlan().getName(), planExercise.getWorkoutPlan().getId(), planExercise.getWorkoutPlan().getCreatedAt(), planExercise.getWorkoutPlan().getUpdatedAt());
+        planExerciseResponse.setExerciseResponse(exerciseResponse);
+        planExerciseResponse.setWorkoutPlanResponse(wpr);
         planExerciseResponse.setTargetSets(planExercise.getTargetSets());
         planExerciseResponse.setTargetReps(planExercise.getTargetReps());
 
@@ -72,7 +77,15 @@ public class PlanExerciseController {
             return ResponseEntity.status(400).body(response);
         }
 
-        List<PlanExerciseResponse> responseList = exercisesOfPlan.stream().map(ep -> new PlanExerciseResponse(ep.getId(), ep.getExercise().getId(), ep.getWorkoutPlan().getId(), ep.getTargetSets(), ep.getTargetReps())).collect(Collectors.toList());
+        List<PlanExerciseResponse> responseList = exercisesOfPlan.stream().map(ep -> {
+            PlanExerciseResponse r = new PlanExerciseResponse();
+            r.setId(ep.getId());
+            r.setExerciseResponse(new ExerciseResponse(ep.getExercise().getId(), ep.getExercise().getName(), ep.getExercise().getMuscleGroup()));
+            r.setWorkoutPlanResponse(new WorkoutPlanResponse(ep.getWorkoutPlan().getName(), ep.getWorkoutPlan().getId(), ep.getWorkoutPlan().getCreatedAt(), ep.getWorkoutPlan().getUpdatedAt()));
+            r.setTargetSets(ep.getTargetSets());
+            r.setTargetReps(ep.getTargetReps());
+            return r;
+        }).collect(Collectors.toList());
         Map<String, Object> response = new HashMap<>();
         response.put("plan_exercises", responseList);
         response.put("user_id", user.getId());
@@ -98,8 +111,12 @@ public class PlanExerciseController {
 
         PlanExerciseResponse planExerciseResponse = new PlanExerciseResponse();
         planExerciseResponse.setId(planExercise.getId());
-        planExerciseResponse.setExerciseId(planExercise.getExercise().getId());
-        planExerciseResponse.setWorkoutPlanId(planExercise.getWorkoutPlan().getId());
+
+        ExerciseResponse exerciseResponse = new ExerciseResponse(planExercise.getExercise().getId(), planExercise.getExercise().getName(), planExercise.getExercise().getMuscleGroup());
+        WorkoutPlanResponse wpr = new WorkoutPlanResponse(planExercise.getWorkoutPlan().getName(), planExercise.getWorkoutPlan().getId(), planExercise.getWorkoutPlan().getCreatedAt(), planExercise.getWorkoutPlan().getUpdatedAt());
+
+        planExerciseResponse.setExerciseResponse(exerciseResponse);
+        planExerciseResponse.setWorkoutPlanResponse(wpr);
         planExerciseResponse.setTargetSets(planExercise.getTargetSets());
         planExerciseResponse.setTargetReps(planExercise.getTargetReps());
 
@@ -122,7 +139,18 @@ public class PlanExerciseController {
             return ResponseEntity.status(400).body(response);
         }
 
-        PlanExerciseResponse planExerciseResponse = new PlanExerciseResponse(deletedPlan.getId(), deletedPlan.getExercise().getId(), deletedPlan.getWorkoutPlan().getId(), deletedPlan.getTargetSets(), deletedPlan.getTargetReps());
+        PlanExerciseResponse planExerciseResponse = new PlanExerciseResponse();
+        planExerciseResponse.setId(deletedPlan.getId());
+
+        ExerciseResponse exerciseResponse = new ExerciseResponse(deletedPlan.getExercise().getId(),deletedPlan.getExercise().getName(), deletedPlan.getExercise().getMuscleGroup());
+        WorkoutPlanResponse wpr = new WorkoutPlanResponse(deletedPlan.getWorkoutPlan().getName(), deletedPlan.getWorkoutPlan().getId(), deletedPlan.getWorkoutPlan().getCreatedAt(), deletedPlan.getWorkoutPlan().getUpdatedAt());
+
+        planExerciseResponse.setExerciseResponse(exerciseResponse);
+        planExerciseResponse.setWorkoutPlanResponse(wpr);
+
+        planExerciseResponse.setTargetSets(deletedPlan.getTargetSets());
+        planExerciseResponse.setTargetReps(deletedPlan.getTargetReps()  );
+
         Map<String, Object> response = new HashMap<>();
         response.put("plan_exercise", planExerciseResponse);
         response.put("user_id", user.getId());

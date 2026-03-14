@@ -1,4 +1,4 @@
-package com.gymtracker.demo.dtos;
+package com.gymtracker.demo.dtos.WorkoutPlanDTOs;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

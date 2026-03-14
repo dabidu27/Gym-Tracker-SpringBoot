@@ -1,16 +1,14 @@
 package com.gymtracker.demo.controller;
 
 import com.gymtracker.demo.auth.Middleware;
-import com.gymtracker.demo.dtos.CreatePlanRequest;
-import com.gymtracker.demo.dtos.WorkoutPlanResponse;
+import com.gymtracker.demo.dtos.WorkoutPlanDTOs.CreatePlanRequest;
+import com.gymtracker.demo.dtos.WorkoutPlanDTOs.WorkoutPlanResponse;
 import com.gymtracker.demo.entity.User;
 import com.gymtracker.demo.entity.WorkoutPlan;
 import com.gymtracker.demo.service.WorkoutPlanService;
 import jakarta.validation.Valid;
-import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;

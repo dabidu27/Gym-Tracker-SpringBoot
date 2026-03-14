@@ -1,4 +1,4 @@
-package com.gymtracker.demo.dtos;
+package com.gymtracker.demo.dtos.PlanExerciseDTOs;
 
 //user creates workout plan -> user select workout plan -> user adds an exercise from the global list of exercises
 //the frontend sends the workout plan id through the url, and in the request the exerciseId (from the global exercises table) and targetSets and targetReps

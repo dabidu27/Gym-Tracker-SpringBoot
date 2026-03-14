@@ -1,4 +1,4 @@
-package com.gymtracker.demo.dtos;
+package com.gymtracker.demo.dtos.PlanExerciseDTOs;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
