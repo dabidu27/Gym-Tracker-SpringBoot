@@ -7,6 +7,7 @@ import com.gymtracker.demo.entity.WorkoutPlan;
 import com.gymtracker.demo.repository.ExerciseRepository;
 import com.gymtracker.demo.repository.PlanExerciseRepository;
 import com.gymtracker.demo.repository.WorkoutPlanRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.EscapedErrors;
@@ -68,5 +69,14 @@ public class PlanExerciseService {
         planExercise.setTargetSets(newSets);
         planExercise.setTargetReps(newReps);
         return this.planExerciseRepository.save(planExercise);
+    }
+
+    @Transactional
+    public PlanExercise deleteExercise(Long workoutPlanId, Long planExerciseId, User user){
+
+        WorkoutPlan wp = this.workoutPlanRepository.findByIdAndUser(workoutPlanId, user).orElseThrow(() -> new RuntimeException("Workout plan not found"));
+        PlanExercise planExercise = this.planExerciseRepository.findById(planExerciseId).orElseThrow(() -> new RuntimeException("Exercise not found in this workout plan"));
+        this.planExerciseRepository.delete(planExercise);
+        return planExercise;
     }
 }
