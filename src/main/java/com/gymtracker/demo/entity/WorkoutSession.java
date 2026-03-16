@@ -39,6 +39,6 @@ public class WorkoutSession {
     private LocalDateTime endedAt;
 
     @Column(columnDefinition = "integer default 0")
-    private Integer totalBreakSeconds;
+    private Integer totalBreakSeconds = 0; //don't forget to add default value here
 
 }
