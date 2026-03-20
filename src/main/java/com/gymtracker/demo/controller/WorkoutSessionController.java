@@ -64,7 +64,7 @@ public class WorkoutSessionController {
     }
 
     //Patch vs Put request:
-    //Both are for editing an entry in the db, but patch changes only 1 or some attributes, put changes the all
+    //Both are for editing an entry in the db, but patch changes only 1 or some attributes, put changes them all
     @PatchMapping("/{workoutSessionId}/end")
     public ResponseEntity<Object> endWorkoutSession(@PathVariable Long workoutSessionId){
 
